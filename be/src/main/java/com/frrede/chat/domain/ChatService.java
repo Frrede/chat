@@ -31,6 +31,7 @@ public class ChatService {
         .stream()
         .map(message -> OutgoingMessage
             .builder()
+            .id(message.getId())
             .token(message.getToken())
             .name(message.getName())
             .message(message.getMessage())
@@ -44,6 +45,7 @@ public class ChatService {
         .stream()
         .map(message -> OutgoingMessage
             .builder()
+            .id(message.getId())
             .token(message.getToken())
             .name(message.getName())
             .message(message.getMessage())

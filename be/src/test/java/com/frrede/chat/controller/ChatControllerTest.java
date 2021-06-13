@@ -13,6 +13,7 @@ import com.frrede.chat.domain.IncomingMessage;
 import com.frrede.chat.domain.OutgoingMessage;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -82,6 +83,7 @@ class ChatControllerTest {
     void before() throws Exception {
       when(chatService.getAllMessages()).thenReturn(List.of(
           OutgoingMessage.builder()
+              .id(UUID.fromString("7880c221-aabc-4695-ab75-76fa026ece29"))
               .token("TOKEN")
               .name("Testy McTest")
               .message("Just a test")
@@ -97,6 +99,7 @@ class ChatControllerTest {
       resultActions
           .andExpect(status().isOk())
           .andExpect(MockMvcResultMatchers.jsonPath("$.messages.size()").value(1))
+          .andExpect(MockMvcResultMatchers.jsonPath("$.messages[0].id").value("7880c221-aabc-4695-ab75-76fa026ece29"))
           .andExpect(MockMvcResultMatchers.jsonPath("$.messages[0].token").value("TOKEN"))
           .andExpect(MockMvcResultMatchers.jsonPath("$.messages[0].name").value("Testy McTest"))
           .andExpect(MockMvcResultMatchers.jsonPath("$.messages[0].message").value("Just a test"))
@@ -113,6 +116,7 @@ class ChatControllerTest {
     void before() throws Exception {
       when(chatService.getAllMessagesGreaterThan(any())).thenReturn(List.of(
           OutgoingMessage.builder()
+              .id(UUID.fromString("7880c221-aabc-4695-ab75-76fa026ece29"))
               .token("TOKEN")
               .name("Testy McTest")
               .message("Just a test")
@@ -128,6 +132,7 @@ class ChatControllerTest {
       resultActions
           .andExpect(status().isOk())
           .andExpect(MockMvcResultMatchers.jsonPath("$.messages.size()").value(1))
+          .andExpect(MockMvcResultMatchers.jsonPath("$.messages[0].id").value("7880c221-aabc-4695-ab75-76fa026ece29"))
           .andExpect(MockMvcResultMatchers.jsonPath("$.messages[0].token").value("TOKEN"))
           .andExpect(MockMvcResultMatchers.jsonPath("$.messages[0].name").value("Testy McTest"))
           .andExpect(MockMvcResultMatchers.jsonPath("$.messages[0].message").value("Just a test"))

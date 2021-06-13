@@ -45,6 +45,7 @@ public class ChatController {
     var messages = outgoingMessages
         .stream()
         .map(outgoingMessage -> MessageResponseDto.builder()
+            .id(outgoingMessage.getId())
             .token(outgoingMessage.getToken())
             .name(outgoingMessage.getName())
             .message(outgoingMessage.getMessage())
