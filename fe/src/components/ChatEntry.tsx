@@ -17,7 +17,7 @@ export function ChatEntry(props: ChatEntryProps) {
         { props.message.message }
       </Typography>
       <Typography variant="caption" display="block" gutterBottom>
-        { props.message.date.toDateString() }
+        { props.message.date }
       </Typography>
     </>
   );

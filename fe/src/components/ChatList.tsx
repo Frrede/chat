@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
 
 export interface ChatListProps {
   token: String,
-  messages: Message[];
+  messages: Message[] | undefined;
 }
 
 export function ChatList(props: ChatListProps) {
@@ -30,14 +30,13 @@ export function ChatList(props: ChatListProps) {
   return (
     <>
       {
-        props.messages.map(message => {
+        props.messages && props.messages.map(message => {
           return (
             <div className={getClassName(message)} key={'chat-' + message.id}>
               <ChatEntry
                 message={message}
               />
             </div>
-
           );
         })
       }

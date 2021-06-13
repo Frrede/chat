@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, Card, CardActions, CardContent, Container, makeStyles, TextField, Typography} from '@material-ui/core';
 import {ChatList} from './ChatList';
+import {sendMessage} from '../services/chat.service';
+import {usePollMessagesHook} from '../hooks/poll-messages.hook';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -31,36 +33,36 @@ const useStyles = makeStyles((theme) => ({
 export function ChatPage() {
   const classes = useStyles();
 
-  const messages = [
-    {
-      id: 'hfk',
-      token: '123',
-      name: 'Test 1',
-      message: 'as',
-      date: new Date()
-    },
-    {
-      id: 'jlj',
-      token: '124',
-      name: 'asasf',
-      message: 'as',
-      date: new Date()
+  const [ name, setName ] = useState<string>();
+  const [ message, setMessage ] = useState<string>();
+  const { messages, triggerReload } = usePollMessagesHook();
+  const token = 'token' + name;
+
+  async function sendNewMessage() {
+    if (!name || !message) {
+      return;
     }
-  ];
+    await sendMessage({
+      token,
+      name,
+      message
+    })
+    triggerReload();
+  }
 
   return (
     <Container maxWidth="sm" className={classes.container}>
       <Typography variant="h4" component="h1">
         Chat
       </Typography>
-      <TextField variant="outlined" label="Name" />
+      <TextField variant="outlined" label="Name" onChange={(event) => setName(event.target.value)}/>
       <Card variant="outlined" className={classes.content}>
-        <CardContent className={classes.chatList}>
-          <ChatList messages={messages} token="124"/>
+        <CardContent className={classes.chatList} data-testid="chat-list">
+          <ChatList messages={messages} token={token} />
         </CardContent>
         <CardActions className={classes.footer}>
-          <TextField variant="outlined" className={classes.text}/>
-          <Button size="small">Send</Button>
+          <TextField variant="outlined" className={classes.text} onChange={(event) => setMessage(event.target.value)}/>
+          <Button size="small" disabled={!name || !message} onClick={sendNewMessage}>Send</Button>
         </CardActions>
       </Card>
     </Container>

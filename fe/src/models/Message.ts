@@ -3,5 +3,5 @@ export interface Message {
   token: String;
   name: String;
   message: String;
-  date: Date;
+  date: String;
 }
