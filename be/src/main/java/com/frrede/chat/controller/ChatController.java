@@ -1,7 +1,11 @@
 package com.frrede.chat.controller;
 
+import com.frrede.chat.domain.ChatService;
+import com.frrede.chat.domain.IncomingMessage;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,19 +21,38 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/chat")
 public class ChatController {
 
+  private final ChatService chatService;
+
   @PostMapping()
   public void sendMessage(@RequestBody() SendMessageRequestDto sendMessageRequestDto, @RequestHeader() String token) {
-    System.out.println(sendMessageRequestDto);
-    System.out.println(token);
+    chatService.createMessage(IncomingMessage.builder()
+        .token(token)
+        .name(sendMessageRequestDto.getName())
+        .message(sendMessageRequestDto.getMessage())
+        .build()
+    );
   }
 
   @GetMapping()
   public GetAllMessagesResponseDto getAllMessages(
       @RequestParam()
       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-      Optional<Date> startingDate
+      Optional<LocalDateTime> startingDate
   ) {
-    System.out.println(startingDate);
-    return GetAllMessagesResponseDto.builder().build();
+    var outgoingMessages = startingDate.isPresent() ?
+        chatService.getAllMessagesAfterStartingDate(startingDate.get()) :
+        chatService.getAllMessages();
+
+    var messages = outgoingMessages
+        .stream()
+        .map(outgoingMessage -> MessageResponseDto.builder()
+            .token(outgoingMessage.getToken())
+            .name(outgoingMessage.getName())
+            .message(outgoingMessage.getMessage())
+            .date(outgoingMessage.getDate())
+            .build())
+        .collect(Collectors.toList());
+
+    return GetAllMessagesResponseDto.builder().messages(messages).build();
   }
 }
