@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +24,7 @@ public class ChatController {
   private final ChatService chatService;
 
   @PostMapping()
+  @CrossOrigin
   public void sendMessage(@RequestBody() SendMessageRequestDto sendMessageRequestDto, @RequestHeader() String token) {
     chatService.createMessage(IncomingMessage.builder()
         .token(token)
@@ -33,6 +35,7 @@ public class ChatController {
   }
 
   @GetMapping()
+  @CrossOrigin
   public GetAllMessagesResponseDto getAllMessages(
       @RequestParam()
       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
