@@ -111,7 +111,7 @@ class ChatControllerTest {
 
     @BeforeEach
     void before() throws Exception {
-      when(chatService.getAllMessagesAfterStartingDate(any())).thenReturn(List.of(
+      when(chatService.getAllMessagesGreaterThan(any())).thenReturn(List.of(
           OutgoingMessage.builder()
               .token("TOKEN")
               .name("Testy McTest")

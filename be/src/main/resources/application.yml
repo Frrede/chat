@@ -1,0 +1,5 @@
+spring:
+  liquibase:
+    change-log: 'classpath:/db/changelog-master.xml'
+    default-schema: public
+    liquibase-schema: public

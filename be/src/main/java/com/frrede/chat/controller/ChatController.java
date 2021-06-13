@@ -3,7 +3,6 @@ package com.frrede.chat.controller;
 import com.frrede.chat.domain.ChatService;
 import com.frrede.chat.domain.IncomingMessage;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +39,7 @@ public class ChatController {
       Optional<LocalDateTime> startingDate
   ) {
     var outgoingMessages = startingDate.isPresent() ?
-        chatService.getAllMessagesAfterStartingDate(startingDate.get()) :
+        chatService.getAllMessagesGreaterThan(startingDate.get()) :
         chatService.getAllMessages();
 
     var messages = outgoingMessages
